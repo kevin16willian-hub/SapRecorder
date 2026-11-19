@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import sys
 import time
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
+from typing import TYPE_CHECKING
 
 import pythoncom
 
@@ -13,7 +16,9 @@ if not __package__:  # launched as a plain script (e.g. VS Code Run button)
 from .codegen import step_to_python
 from .connection import get_session, list_sessions
 from .model import Step
-from .recorder import Recorder
+
+if TYPE_CHECKING:
+    from .recorder import Recorder
 
 
 class RecorderApp:
@@ -89,6 +94,8 @@ class RecorderApp:
             return
         _, connection, session = self.sessions[index]
         try:
+            from .recorder import Recorder
+
             self.recorder = Recorder(
                 get_session(connection, session), on_step=self._append, cell_clicks=self.cell_clicks.get()
             )
